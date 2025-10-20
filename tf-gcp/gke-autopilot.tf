@@ -1,4 +1,4 @@
-resource "google_container_cluster" "autopilorcluster" {
+resource "google_container_cluster" "autopilocluster" {
     name = "bulletin-board-prod"
     location = var.region
     project = var.project_id

@@ -57,3 +57,17 @@ typings/
 # dotenv environment variables file
 .env
 
+# Terrafom
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.log
+*.tfvars
+override.tf
+override.tf.json
+terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+.terraform.lock.hcl
