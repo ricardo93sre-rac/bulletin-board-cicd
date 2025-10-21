@@ -22,12 +22,12 @@ stages {
     stage('Setup Gcloud'){
         steps{
             withCredentials([file(credentialsId: env.GCP_SA_CREDENTIALS_ID, variable: 'GCP_KEYFILE')]){
-                sh '''
+                sh """
                     echo "Autenticando gcloud..."
                     gcloud auth activate-service-account --key-file=$GCP_KEYFILE
                     gcloud config set project ${PROJECT_ID}
                     gcloud auth configure-docker ${REGION}-docker.pkg.dev -q || true
-                '''
+                """
             }
 
         }
@@ -39,17 +39,14 @@ stages {
                 COMMIT=sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                 IMAGE_TAG="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/bulletin-board:${COMMIT}"
             }
-            sh '''
-                docker build -t ${IMAGE_TAG} -f bulletin-board-app/Dockerfile .
-            '''
+            sh "docker build -t ${IMAGE_TAG} -f bulletin-board-app/Dockerfile ."
+            
         }
     }
 
     stage('Push Image'){
         steps {
-            sh '''
-                docker push ${IMAGE_TAG}
-            '''
+            sh "docker push ${IMAGE_TAG} "
         }
     }
 
@@ -57,14 +54,14 @@ stages {
         steps {
         // Obtener credenciales del cluster y aplicar manifests
         withCredentials([file(credentialsId: env.GCP_SA_CREDENTIAL_ID, variable: 'GCP_KEYFILE')]) {
-          sh '''
+          sh """
             gcloud auth activate-service-account --key-file=$GCP_KEYFILE
             gcloud config set project ${PROJECT_ID}
             # Obtener credenciales del cluster (ajusta nombre/zone)
             gcloud container clusters get-credentials bulletin-board-prod --region us-central1 --project cloudregops            # Reemplazar imagen en manifest y aplicar
             sed -e "s|IMAGE_PLACEHOLDER|${IMAGE_TAG}|g" k8s/deployment.yaml | kubectl apply -f -
             kubectl apply -f k8s/service.yaml
-          '''
+          """
         }
 
         }   
@@ -72,9 +69,8 @@ stages {
 
     stage('Post-deploy smoke test'){
         steps {
-            sh '''
-                kubectl rollout status deployment/bulletin-board-deployment --timeout=120s
-            '''
+            sh " kubectl rollout status deployment/bulletin-board-deployment --timeout=120s "
+            
         }
     }
 }
