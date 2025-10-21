@@ -1,8 +1,8 @@
 pipeline {
     agent any
-}
 
-eviroment {
+
+evironment {
     PROJECT_ID = 'cloudregops'
     REGION = 'us-central1'
     REPO = 'bulletin-board'
@@ -84,6 +84,8 @@ post {
     failure{
         echo 'Pipeline Fallo'
     }
+ }
+
 }
 
 }
