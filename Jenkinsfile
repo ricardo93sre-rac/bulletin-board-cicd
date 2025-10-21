@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
     agent any
 }
 
@@ -12,7 +12,7 @@ eviroment {
 
 }
 
-stages{
+stages {
     stage('Checkout'){
         steps{
             checkout scm
@@ -34,8 +34,8 @@ stages{
     }
 
     stage('Build Docker Images'){
-        steps{
-            script{
+        steps {
+            script {
                 COMMIT=sh(returnStdout: true, script: 'git rev-parce --short HEAD').trim()
                 IMAGE_TAG="us-central1-docker.pkg.dev/cloudregops/bulletin-board/bulletin-board:${COMMIT}"
             }
@@ -46,7 +46,7 @@ stages{
     }
 
     stage('Push Image'){
-        steps{
+        steps {
             sh '''
                 docker push ${IMAGE_TAG}
             '''
@@ -69,7 +69,7 @@ stages{
     }
 
     stage('Post-deploy smoke test'){
-        steps{
+        steps {
             sh '''
                 kubectl rollout status deployment/bulletin-board-deployment --timeout=120s
             '''
@@ -77,10 +77,10 @@ stages{
     }
 }
 
-post{
-    success{
+post {
+    success {
         echo 'Despliegue exitoso!'
-    }
+    } 
     failure{
         echo 'Pipeline Fallo'
     }
