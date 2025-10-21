@@ -2,7 +2,7 @@ pipeline {
     agent any
 
 
-evironment {
+environment {
     PROJECT_ID = 'cloudregops'
     REGION = 'us-central1'
     REPO = 'bulletin-board'
@@ -66,6 +66,8 @@ stages {
             kubectl apply -f k8s/service.yaml
           '''
         }
+
+        }   
     }
 
     stage('Post-deploy smoke test'){
@@ -88,4 +90,3 @@ post {
 
 }
 
-}
