@@ -39,7 +39,7 @@ stages {
                 COMMIT=sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                 IMAGE_TAG="us-central1-docker.pkg.dev/cloudregops/bulletin-board/bulletin-board:${COMMIT}"
             }
-            sh ''''
+            sh '''
                 docker build -t ${IMAGE_TAG} -f bulletin-board-app/Dockerfile .
             '''
         }
