@@ -53,7 +53,7 @@ stages {
     stage('Deploy to GKE'){
         steps {
         // Obtener credenciales del cluster y aplicar manifests
-        withCredentials([file(credentialsId: env.GCP_SA_CREDENTIAL_ID, variable: 'GCP_KEYFILE')]) {
+        withCredentials([file(credentialsId: env.GCP_SA_CREDENTIALS_ID, variable: 'GCP_KEYFILE')]) {
           sh """
             gcloud auth activate-service-account --key-file=$GCP_KEYFILE
             gcloud config set project ${PROJECT_ID}
