@@ -13,9 +13,9 @@ eviroment {
 }
 
 stages{
-    stage('Chekout'){
+    stage('Checkout'){
         steps{
-            Chekout scm
+            Checkout scm
         }
     }
 
